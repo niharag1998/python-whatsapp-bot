@@ -146,8 +146,7 @@ def handle_text_message(message):
 def handle_interactive_message(message):
     interactive = message["interactive"]
     if interactive["type"] == "list_reply":
-        data = get_menu_message_input(current_app.config["RECIPIENT_WAID"])
-        send_message(data)
+        handle_list_reply(interactive)
     else:
         logging.error(f"Unsupported interactive type: {interactive['type']}")
         handle_retry_message(message)
