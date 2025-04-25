@@ -29,7 +29,7 @@ def get_menu_message_input(recipient):
         {
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
-            "to": "<WHATSAPP_USER_PHONE_NUMBER>",
+            "to": recipient,
             "type": "interactive",
             "interactive": {
                 "type": "list",
@@ -125,16 +125,17 @@ def process_whatsapp_message(body):
     message_body = message["text"]["body"]
 
     # TODO: implement custom function here
+    data = None
     if message_body == "menu":
         data = get_menu_message_input(current_app.config["RECIPIENT_WAID"])
     else:
         response = generate_response(message_body)
+        data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
 
     # OpenAI Integration
     # response = generate_response(message_body, wa_id, name)
     # response = process_text_for_whatsapp(response)
 
-    data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
     send_message(data)
 
 
