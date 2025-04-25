@@ -41,6 +41,7 @@ def handle_message():
 
     try:
         if is_valid_whatsapp_message(body):
+            logging.info(f"request body: {body}")
             process_whatsapp_message(body)
             return jsonify({"status": "ok"}), 200
         else:
