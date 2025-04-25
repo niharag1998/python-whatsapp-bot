@@ -24,6 +24,48 @@ def get_text_message_input(recipient, text):
         }
     )
 
+def get_menu_message_input(recipient):
+    return json.dumps(
+        {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": "<WHATSAPP_USER_PHONE_NUMBER>",
+            "type": "interactive",
+            "interactive": {
+                "type": "list",
+                "header": {
+                    "type": "text",
+                    "text": "Choose an option"
+                },
+                "body": {
+                    "text": "Choose from the following options"
+                },
+                "footer": {
+                    "text": "Choose from the following options"
+                },
+                "action": {
+                    "button": "Select",
+                    "sections": [
+                        {
+                            "title": "Select an option",
+                            "rows": [
+                            {
+                                "id": "1",
+                                "title": "Option 1",
+                                "description": "Option 1 description"
+                            },
+                            {
+                                "id": "2",
+                                "title": "Option 2",
+                                "description": "Option 2 description"
+                            }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    )
 
 def generate_response(response):
     # Return text in uppercase
@@ -83,7 +125,10 @@ def process_whatsapp_message(body):
     message_body = message["text"]["body"]
 
     # TODO: implement custom function here
-    response = generate_response(message_body)
+    if message_body == "menu":
+        data = get_menu_message_input(current_app.config["RECIPIENT_WAID"])
+    else:
+        response = generate_response(message_body)
 
     # OpenAI Integration
     # response = generate_response(message_body, wa_id, name)
