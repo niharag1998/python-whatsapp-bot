@@ -122,22 +122,31 @@ def process_whatsapp_message(body):
     name = body["entry"][0]["changes"][0]["value"]["contacts"][0]["profile"]["name"]
 
     message = body["entry"][0]["changes"][0]["value"]["messages"][0]
-    message_body = message["text"]["body"]
+    # message_body = message["text"]["body"]
 
     # TODO: implement custom function here
     data = None
-    if message_body == "menu":
-        data = get_menu_message_input(current_app.config["RECIPIENT_WAID"])
+    if message["type"] == "interactive":
+        handle_interactive_message(message)
+    elif message["type"] == "text":
+        handle_text_message(message)
     else:
-        response = generate_response(message_body)
-        data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
+        logging.error(f"Unsupported message type: {message['type']}")
+        handle_retry_message(message)
 
-    # OpenAI Integration
-    # response = generate_response(message_body, wa_id, name)
-    # response = process_text_for_whatsapp(response)
-
+def handle_text_message(message):
+    response = generate_response(message["text"]["body"])
+    data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
     send_message(data)
 
+def handle_interactive_message(message):
+    interactive = message["interactive"]
+    if interactive["type"] == "list_reply":
+        data = get_menu_message_input(current_app.config["RECIPIENT_WAID"])
+        send_message(data)
+    else:
+        logging.error(f"Unsupported interactive type: {interactive['type']}")
+        handle_retry_message(message)
 
 def is_valid_whatsapp_message(body):
     """
@@ -151,3 +160,20 @@ def is_valid_whatsapp_message(body):
         and body["entry"][0]["changes"][0]["value"].get("messages")
         and body["entry"][0]["changes"][0]["value"]["messages"][0]
     )
+
+def handle_retry_message(message):
+    response = generate_response("Please try again")
+    data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
+    send_message(data)
+
+def handle_list_reply(interactive):
+    list_reply = interactive["list_reply"]
+    if list_reply["id"] == "1":
+        data = get_text_message_input(current_app.config["RECIPIENT_WAID"], list_reply["title"] + " selected")
+        send_message(data)
+    elif list_reply["id"] == "2":
+        data = get_text_message_input(current_app.config["RECIPIENT_WAID"], list_reply["title"] + " selected")
+        send_message(data)
+    else:
+        logging.error(f"Unsupported list reply id: {list_reply['id']}")
+        handle_retry_message(message)
