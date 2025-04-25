@@ -136,8 +136,12 @@ def process_whatsapp_message(body):
 
 def handle_text_message(message):
     response = generate_response(message["text"]["body"])
-    data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
-    send_message(data)
+    if response.upper() == "MENU":
+        data = get_menu_message_input(current_app.config["RECIPIENT_WAID"])
+        send_message(data)
+    else:
+        data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
+        send_message(data)
 
 def handle_interactive_message(message):
     interactive = message["interactive"]
