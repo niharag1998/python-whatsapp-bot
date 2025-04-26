@@ -1,7 +1,7 @@
 import logging
 import json
 
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, render_template
 
 from .decorators.security import signature_required
 from .utils.whatsapp_utils import (
@@ -86,5 +86,44 @@ def webhook_get():
 @signature_required
 def webhook_post():
     return handle_message()
+
+@webhook_blueprint.route("/", methods=["GET"])
+def show_order_form():
+    """Display the order form."""
+    return render_template("order_form.html")
+
+@webhook_blueprint.route("/submit-order", methods=["POST"])
+def handle_order():
+    """Handle the order form submission."""
+    try:
+        person_name = request.form.get("person_name")
+        product_name = request.form.get("product_name")
+        quantity = request.form.get("quantity")
+        
+        # Log the order details
+        logging.info(f"New order received - Person: {person_name}, Product: {product_name}, Quantity: {quantity}")
+        
+        # Here you can add additional processing like:
+        # - Saving to a database
+        # - Sending notifications
+        # - Processing payment
+        # - etc.
+        
+        return jsonify({
+            "status": "success",
+            "message": "Order received successfully",
+            "order_details": {
+                "person_name": person_name,
+                "product_name": product_name,
+                "quantity": quantity
+            }
+        }), 200
+        
+    except Exception as e:
+        logging.error(f"Error processing order: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "message": "Failed to process order"
+        }), 500
 
 

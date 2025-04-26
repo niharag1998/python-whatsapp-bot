@@ -2,7 +2,7 @@ import logging
 from flask import current_app, jsonify
 import json
 import requests
-
+from app.utils.messages import get_greetings_message_input
 # from app.services.openai_service import generate_response
 import re
 
@@ -138,10 +138,11 @@ def handle_text_message(message):
     response = generate_response(message["text"]["body"])
     if response.upper() == "MENU":
         data = get_menu_message_input(current_app.config["RECIPIENT_WAID"])
-        send_message(data)
+    elif response.upper() == "HI":
+        data = get_greetings_message_input(current_app.config["RECIPIENT_WAID"])
     else:
         data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
-        send_message(data)
+    send_message(data)
 
 def handle_interactive_message(message):
     interactive = message["interactive"]
