@@ -74,7 +74,7 @@ def get_greetings_message_input(recipient):
                     "text": "Choose from the following options"
                 },
                 "action": {
-                    "button": "Select any one option",
+                    "button": "Select any one",
                     "sections": [
                         {
                             "title": "Section 1",
