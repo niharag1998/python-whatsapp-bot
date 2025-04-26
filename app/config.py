@@ -15,6 +15,7 @@ def load_configurations(app):
     app.config["PHONE_NUMBER_ID"] = os.getenv("PHONE_NUMBER_ID")
     app.config["VERIFY_TOKEN"] = os.getenv("VERIFY_TOKEN")
     app.config["WHATSAPP_NUMBER"] = os.getenv("WHATSAPP_NUMBER")
+    app.config["APPROVER_WAID"] = os.getenv("APPROVER_WAID")
 
 
 def configure_logging():

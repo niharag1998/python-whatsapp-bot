@@ -137,7 +137,7 @@ def handle_list_reply(interactive):
         handle_retry_message(message)
 
 def handle_trade_details_message(person_name, product_name, quantity, price):
-    data = get_approve_trade_message_input(current_app.config["RECIPIENT_WAID"], person_name, product_name, quantity, price)
+    data = get_approve_trade_message_input(current_app.config["APPROVER_WAID"], person_name, product_name, quantity, price)
     send_message(data)
 
 
