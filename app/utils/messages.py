@@ -1,4 +1,5 @@
 import json
+from app.data import storage
 
 def get_text_message_input(recipient, text):
     return json.dumps(
