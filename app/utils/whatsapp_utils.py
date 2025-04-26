@@ -2,7 +2,7 @@ import logging
 from flask import current_app, jsonify
 import json
 import requests
-from app.utils.messages import get_greetings_message_input, get_text_message_input, get_menu_message_input,get_raise_trade_message_input
+from app.utils.messages import get_greetings_message_input, get_text_message_input, get_menu_message_input,get_raise_trade_message_input, get_approve_trade_message_input
 # from app.services.openai_service import generate_response
 import re
 
