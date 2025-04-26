@@ -7,6 +7,7 @@ from .decorators.security import signature_required
 from .utils.whatsapp_utils import (
     process_whatsapp_message,
     is_valid_whatsapp_message,
+    handle_trade_details_message
 )
 
 webhook_blueprint = Blueprint("webhook", __name__)
