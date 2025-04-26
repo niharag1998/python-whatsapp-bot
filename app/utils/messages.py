@@ -82,12 +82,10 @@ def get_greetings_message_input(recipient):
                                 {
                                     "id": "initiate_trade",
                                     "title": "Initiate a new trade",
-                                    "description": "Initiate a new trade"
                                 },
                                 {
-                                    "id": "2",
+                                    "id": "view_trade_history",
                                     "title": "View my trade history",
-                                    "description": "View my trade history"
                                 }
                             ]
                         }
@@ -142,12 +140,10 @@ def get_approve_trade_message_input(recipient, person_name, product_name, quanti
                                 {
                                     "id": "approve_trade",
                                     "title": "Approve the trade",
-                                    "description": "Approve the trade"
                                 },
                                 {
                                     "id": "reject_trade",
                                     "title": "Reject the trade",
-                                    "description": "Reject the trade"
                                 }
                             ]
                         }
