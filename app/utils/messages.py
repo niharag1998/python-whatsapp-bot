@@ -105,8 +105,8 @@ def get_raise_trade_message_input(recipient):
             "to": recipient,
             "type": "text",
             "text": {
-                "preview_url": "https://owl-tolerant-accurately.ngrok-free.app/",
-                "body": "Click here to raise a trade"
+                "preview_url": true,
+                "body": "Click here to raise a trade: https://owl-tolerant-accurately.ngrok-free.app/"
             }
         }
     )
@@ -134,7 +134,7 @@ def get_approve_trade_message_input(recipient, person_name, product_name, quanti
                     "text": "Choose from the following options"
                 },
                 "action": {
-                    "button": "Select any one option",
+                    "button": "Select any one",
                     "sections": [
                         {
                             "title": "Section 1",
