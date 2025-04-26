@@ -227,6 +227,9 @@ def get_view_trade_history_message_input(recipient):
 
 def get_trade_details_message_input(recipient, trade_id):
     trade = storage.get_trade(trade_id)
-    return get_text_message_input(recipient, get_trade_details_text_message_input(trade_id, trade["person_name"], trade["product_name"], trade["quantity"], trade["price"]))
+    if trade:
+        return get_text_message_input(recipient, get_trade_details_text_message_input(trade_id, trade["person_name"], trade["product_name"], trade["quantity"], trade["price"]))
+    else:
+        return get_text_message_input(recipient, "Trade not found")
 
 
