@@ -9,6 +9,7 @@ from .utils.whatsapp_utils import (
     is_valid_whatsapp_message,
     handle_trade_details_message
 )
+from .data import storage
 
 webhook_blueprint = Blueprint("webhook", __name__)
 
@@ -101,10 +102,17 @@ def handle_order():
         product_name = request.form.get("product_name")
         quantity = request.form.get("quantity")
         price = request.form.get("price")
+        
         # Log the order details
-        logging.info(f"New order received - Person: {person_name}, Product: {product_name}, Quantity: {quantity}")
-        handle_trade_details_message(person_name, product_name, quantity, price)
-        # Get WhatsApp number from config or use a default
+        logging.info(f"New order received - Person: {person_name}, Product: {product_name}, Quantity: {quantity}, Price: {price}")
+        
+        # Store the trade in the JSON storage
+        trade_id = storage.add_trade(person_name, product_name, quantity, price)
+        
+        # Send trade details to approver via WhatsApp
+        handle_trade_details_message(person_name, trade_id, product_name, quantity, price)
+        
+        # Get WhatsApp number from config
         whatsapp_number = current_app.config["WHATSAPP_NUMBER"]
         
         # Render the success page with order details
@@ -113,6 +121,7 @@ def handle_order():
             person_name=person_name,
             product_name=product_name,
             quantity=quantity,
+            price=price,
             whatsapp_number=whatsapp_number
         )
         

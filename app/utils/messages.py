@@ -80,11 +80,11 @@ def get_greetings_message_input(recipient):
                             "title": "Section 1",
                             "rows": [
                                 {
-                                    "id": "initiate_trade",
+                                    "id": "initiateTrade",
                                     "title": "Initiate a new trade",
                                 },
                                 {
-                                    "id": "view_trade_history",
+                                    "id": "viewTradeHistory",
                                     "title": "View my trade history",
                                 }
                             ]
@@ -109,10 +109,10 @@ def get_raise_trade_message_input(recipient):
         }
     )
 
-def get_trade_details_text_message_input(person_name, product_name, quantity, price):
-    return "Name - " + person_name + " \n" + "Product - " + product_name + " \n" + "Quantity - " + quantity + " \n" + "Price - " + price
+def get_trade_details_text_message_input(trade_id, person_name, product_name, quantity, price):
+    return "Name - " + person_name + " \n" + "Product - " + product_name + " \n" + "Quantity - " + quantity + " \n" + "Price - " + price + " \n" + "Trade ID - " + trade_id
 
-def get_approve_trade_message_input(recipient, person_name, product_name, quantity, price):
+def get_approve_trade_message_input(recipient, trade_id, person_name, product_name, quantity, price):
     return json.dumps(
         {
             "messaging_product": "whatsapp",
@@ -126,7 +126,7 @@ def get_approve_trade_message_input(recipient, person_name, product_name, quanti
                     "text": "Approve a trade"
                 },
                 "body": {
-                    "text": get_trade_details_text_message_input(person_name, product_name, quantity, price)
+                    "text": get_trade_details_text_message_input(trade_id, person_name, product_name, quantity, price)
                 },
                 "footer": {
                     "text": "Choose from the following options"
@@ -138,11 +138,11 @@ def get_approve_trade_message_input(recipient, person_name, product_name, quanti
                             "title": "Section 1",
                             "rows": [
                                 {
-                                    "id": "approve_trade",
+                                    "id": "approveTrade_" + trade_id,
                                     "title": "Approve the trade",
                                 },
                                 {
-                                    "id": "reject_trade",
+                                    "id": "rejectTrade_" + trade_id,
                                     "title": "Reject the trade",
                                 }
                             ]
@@ -152,3 +152,80 @@ def get_approve_trade_message_input(recipient, person_name, product_name, quanti
             }
         }
     )
+
+def get_trade_id_list_message_input(recipient):
+    
+    
+    return json.dumps({
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual", 
+        "to": recipient,
+        "type": "interactive",
+        "interactive": {
+            "type": "list",
+            "header": {
+                "type": "text",
+                "text": "Trade IDs"
+            },
+            "body": {
+                "text": "Select a trade ID to view details"
+            },
+            "footer": {
+                "text": "Choose from the following options"
+            },
+            "action": {
+                "button": "Select Trade",
+                "sections": [
+                    {
+                        "title": "Available Trades",
+                        "rows": rows
+                    }
+                ]
+            }
+        }
+    })
+
+def get_view_trade_history_message_input(recipient):
+    trades = storage.get_all_trades()
+    rows = []
+    for trade in trades:
+        rows.append({
+            "id": f"viewTrade_{trade['id']}",
+            "title": f"Trade ID: {trade['id']} - {trade['product_name']}"
+        })
+    return json.dumps(
+        {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": recipient,
+            "type": "interactive",
+            "interactive": {
+                "type": "list",
+                "header": {
+                    "type": "text",
+                    "text": "Deal ID"
+                },
+                "body": {
+                    "text": "Select a deal ID to view the details"
+                },
+                "footer": {
+                    "text": "Choose from the following options"
+                },
+                "action": {
+                    "button": "Select any one",
+                    "sections": [
+                        {
+                            "title": "Section 1",
+                            "rows": rows
+                        }
+                    ]
+                }
+            }
+        }
+    )
+
+def get_trade_details_message_input(recipient, trade_id):
+    trade = storage.get_trade(trade_id)
+    return get_text_message_input(recipient, get_trade_details_text_message_input(trade_id, trade["person_name"], trade["product_name"], trade["quantity"], trade["price"]))
+
+
