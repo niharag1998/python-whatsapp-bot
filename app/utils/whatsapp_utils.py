@@ -126,6 +126,12 @@ def handle_list_reply(interactive):
     elif list_reply["id"] == "initiate_trade":
         data = get_raise_trade_message_input(current_app.config["RECIPIENT_WAID"])
         send_message(data)
+    elif list_reply["id"] == "approve_trade":
+        data = get_text_message_input(current_app.config["RECIPIENT_WAID"], "Trade approved")
+        send_message(data)
+    elif list_reply["id"] == "reject_trade":
+        data = get_text_message_input(current_app.config["RECIPIENT_WAID"], "Trade rejected")
+        send_message(data)
     else:
         logging.error(f"Unsupported list reply id: {list_reply['id']}")
         handle_retry_message(message)
