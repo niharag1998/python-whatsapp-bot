@@ -110,7 +110,7 @@ def get_raise_trade_message_input(recipient):
     )
 
 def get_trade_details_text_message_input(trade_id, person_name, product_name, quantity, price):
-    return "Name - " + person_name + " \n" + "Product - " + product_name + " \n" + "Quantity - " + quantity + " \n" + "Price - " + price + " \n" + "Trade ID - " + trade_id
+    return "Name - " + person_name + " \n" + "Product - " + product_name + " \n" + "Quantity - " + str(quantity) + " \n" + "Price - " + str(price) + " \n" + "Trade ID - " + str(trade_id)
 
 def get_approve_trade_message_input(recipient, trade_id, person_name, product_name, quantity, price):
     return json.dumps(
@@ -138,11 +138,11 @@ def get_approve_trade_message_input(recipient, trade_id, person_name, product_na
                             "title": "Section 1",
                             "rows": [
                                 {
-                                    "id": "approveTrade_" + trade_id,
+                                    "id": "approveTrade_" + str(trade_id),
                                     "title": "Approve the trade",
                                 },
                                 {
-                                    "id": "rejectTrade_" + trade_id,
+                                    "id": "rejectTrade_" + str(trade_id),
                                     "title": "Reject the trade",
                                 }
                             ]
