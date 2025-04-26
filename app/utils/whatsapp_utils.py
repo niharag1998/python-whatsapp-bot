@@ -155,7 +155,7 @@ def handle_list_reply(interactive):
         logging.error(f"Unsupported list reply id: {list_reply['id']}")
         handle_retry_message(message)
 
-def handle_trade_details_message(person_name, product_name, quantity, price):
+def handle_trade_details_message(person_name, trade_id, product_name, quantity, price):
     data = get_approve_trade_message_input(current_app.config["APPROVER_WAID"], trade_id, person_name, product_name, quantity, price)
     send_message(data)
 
