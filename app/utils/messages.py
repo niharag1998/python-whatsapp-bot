@@ -105,7 +105,7 @@ def get_raise_trade_message_input(recipient):
             "to": recipient,
             "type": "text",
             "text": {
-                "preview_url": true,
+                "preview_url": True,
                 "body": "Click here to raise a trade: https://owl-tolerant-accurately.ngrok-free.app/"
             }
         }
