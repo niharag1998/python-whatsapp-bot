@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .success-message {
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            color: #3c763d;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .order-details {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .order-details p {
+            margin: 10px 0;
+        }
+        .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+        }
+        .whatsapp-icon {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-message">
+        <h1>🎉 Order Successfully Placed! 🎉</h1>
+        <p>Thank you for your order. Your request has been received and is being processed.</p>
+    </div>
+
+    <div class="order-details">
+        <h2>Order Details</h2>
+        <p><strong>Person Name:</strong> {{ person_name }}</p>
+        <p><strong>Product Name:</strong> {{ product_name }}</p>
+        <p><strong>Quantity:</strong> {{ quantity }}</p>
+    </div>
+
+    <a href="https://wa.me/{{ whatsapp_number }}" class="whatsapp-button" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="24" height="24" class="whatsapp-icon">
+        Contact us on WhatsApp
+    </a>
+</body>
+</html> 

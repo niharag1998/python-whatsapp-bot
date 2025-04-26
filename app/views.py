@@ -99,25 +99,21 @@ def handle_order():
         person_name = request.form.get("person_name")
         product_name = request.form.get("product_name")
         quantity = request.form.get("quantity")
-        
+        price = request.form.get("price")
         # Log the order details
         logging.info(f"New order received - Person: {person_name}, Product: {product_name}, Quantity: {quantity}")
+        handle_trade_details_message(person_name, product_name, quantity, price)
+        # Get WhatsApp number from config or use a default
+        whatsapp_number = current_app.config["WHATSAPP_NUMBER"]
         
-        # Here you can add additional processing like:
-        # - Saving to a database
-        # - Sending notifications
-        # - Processing payment
-        # - etc.
-        
-        return jsonify({
-            "status": "success",
-            "message": "Order received successfully",
-            "order_details": {
-                "person_name": person_name,
-                "product_name": product_name,
-                "quantity": quantity
-            }
-        }), 200
+        # Render the success page with order details
+        return render_template(
+            "order_success.html",
+            person_name=person_name,
+            product_name=product_name,
+            quantity=quantity,
+            whatsapp_number=whatsapp_number
+        )
         
     except Exception as e:
         logging.error(f"Error processing order: {str(e)}")

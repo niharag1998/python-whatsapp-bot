@@ -2,7 +2,7 @@ import logging
 from flask import current_app, jsonify
 import json
 import requests
-from app.utils.messages import get_greetings_message_input
+from app.utils.messages import get_greetings_message_input, get_text_message_input, get_menu_message_input,get_raise_trade_message_input
 # from app.services.openai_service import generate_response
 import re
 
@@ -11,61 +11,6 @@ def log_http_response(response):
     logging.info(f"Status: {response.status_code}")
     logging.info(f"Content-type: {response.headers.get('content-type')}")
     logging.info(f"Body: {response.text}")
-
-
-def get_text_message_input(recipient, text):
-    return json.dumps(
-        {
-            "messaging_product": "whatsapp",
-            "recipient_type": "individual",
-            "to": recipient,
-            "type": "text",
-            "text": {"preview_url": False, "body": text},
-        }
-    )
-
-def get_menu_message_input(recipient):
-    return json.dumps(
-        {
-            "messaging_product": "whatsapp",
-            "recipient_type": "individual",
-            "to": recipient,
-            "type": "interactive",
-            "interactive": {
-                "type": "list",
-                "header": {
-                    "type": "text",
-                    "text": "Choose an option"
-                },
-                "body": {
-                    "text": "Choose from the following options"
-                },
-                "footer": {
-                    "text": "Choose from the following options"
-                },
-                "action": {
-                    "button": "Select",
-                    "sections": [
-                        {
-                            "title": "Select an option",
-                            "rows": [
-                            {
-                                "id": "1",
-                                "title": "Option 1",
-                                "description": "Option 1 description"
-                            },
-                            {
-                                "id": "2",
-                                "title": "Option 2",
-                                "description": "Option 2 description"
-                            }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-    )
 
 def generate_response(response):
     # Return text in uppercase
@@ -178,6 +123,15 @@ def handle_list_reply(interactive):
     elif list_reply["id"] == "2":
         data = get_text_message_input(current_app.config["RECIPIENT_WAID"], list_reply["title"] + " selected")
         send_message(data)
+    elif list_reply["id"] == "initiate_trade":
+        data = get_raise_trade_message_input(current_app.config["RECIPIENT_WAID"])
+        send_message(data)
     else:
         logging.error(f"Unsupported list reply id: {list_reply['id']}")
         handle_retry_message(message)
+
+def handle_trade_details_message(person_name, product_name, quantity, price):
+    data = get_approve_trade_message_input(current_app.config["RECIPIENT_WAID"], person_name, product_name, quantity, price)
+    send_message(data)
+
+

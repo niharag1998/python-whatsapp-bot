@@ -11,6 +11,49 @@ def get_text_message_input(recipient, text):
         }
     )
 
+def get_menu_message_input(recipient):
+    return json.dumps(
+        {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": recipient,
+            "type": "interactive",
+            "interactive": {
+                "type": "list",
+                "header": {
+                    "type": "text",
+                    "text": "Choose an option"
+                },
+                "body": {
+                    "text": "Choose from the following options"
+                },
+                "footer": {
+                    "text": "Choose from the following options"
+                },
+                "action": {
+                    "button": "Select",
+                    "sections": [
+                        {
+                            "title": "Select an option",
+                            "rows": [
+                            {
+                                "id": "1",
+                                "title": "Option 1",
+                                "description": "Option 1 description"
+                            },
+                            {
+                                "id": "2",
+                                "title": "Option 2",
+                                "description": "Option 2 description"
+                            }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    )
+
 def get_greetings_message_input(recipient):
     return json.dumps(
         {
@@ -37,7 +80,7 @@ def get_greetings_message_input(recipient):
                             "title": "Section 1",
                             "rows": [
                                 {
-                                    "id": "1",
+                                    "id": "initiate_trade",
                                     "title": "Initiate a new trade",
                                     "description": "Initiate a new trade"
                                 },
@@ -59,40 +102,57 @@ def get_raise_trade_message_input(recipient):
         {
             "recipient_type": "individual",
             "messaging_product": "whatsapp",
-            "to": "PHONE_NUMBER",
-            "type": "interactive",
-            "interactive": {
-                "type": "flow",
-                "header": {
-                "type": "text",
-                "text": "Flow message header"
-                },
-                "body": {
-                "text": "Flow message body"
-                },
-                "footer": {
-                "text": "Flow message footer"
-                },
-                "action": {
-                    "name": "flow",
-                    "parameters": {
-                        "flow_message_version": "3",
-                        "flow_token": "AQAAAAACS5FpgQ_cAAAAAD0QI3s.",
-                        "flow_id": "1",
-                        "flow_cta": "Book!",
-                        "flow_action": "navigate",
-                        "flow_action_payload": {
-                            "screen": "<SCREEN_NAME>",
-                            "data":{ 
-                                "product_name": "name",
-                                "product_description": "description",
-                                "product_price": 100
-                            }
-                        }
-                    }
-                }
+            "to": recipient,
+            "type": "text",
+            "text": {
+                "preview_url": "https://owl-tolerant-accurately.ngrok-free.app/",
+                "body": "Click here to raise a trade"
             }
         }
     )
 
-    
+def get_trade_details_text_message_input(person_name, product_name, quantity, price):
+    return "Name - " + person_name + " \n" + "Product - " + product_name + " \n" + "Quantity - " + quantity + " \n" + "Price - " + price
+
+def get_approve_trade_message_input(recipient, person_name, product_name, quantity, price):
+    return json.dumps(
+        {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": recipient,
+            "type": "interactive",
+            "interactive": {
+                "type": "list",
+                "header": {
+                    "type": "text",
+                    "text": "Approve a trade"
+                },
+                "body": {
+                    "text": get_trade_details_text_message_input(person_name, product_name, quantity, price)
+                },
+                "footer": {
+                    "text": "Choose from the following options"
+                },
+                "action": {
+                    "button": "Select any one option",
+                    "sections": [
+                        {
+                            "title": "Section 1",
+                            "rows": [
+                                {
+                                    "id": "initiate_trade",
+                                    "title": "Initiate a new trade",
+                                    "description": "Initiate a new trade"
+                                },
+                                {
+                                    "id": "2",
+                                    "title": "View my trade history",
+                                    "description": "View my trade history"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    )
